@@ -1,15 +1,25 @@
 {
   "name": "04node_database",
   "version": "1.0.0",
-  "description": "",
+  "description": "node-express",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "express_debug": "DEBUG=express* node index.js"
   },
-  "author": "Deepak",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deepakkadarivel/express-node.git"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express",
+    "postgres"
+  ],
+  "author": "Deepak Kadarivel",
+  "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
