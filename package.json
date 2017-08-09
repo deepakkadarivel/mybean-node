@@ -1,0 +1,19 @@
+{
+  "name": "04node_database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "express_debug": "DEBUG=express* node index.js"
+  },
+  "author": "Deepak",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "pg-promise": "^6.3.8"
+  }
+}
