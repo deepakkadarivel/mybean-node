@@ -9,7 +9,7 @@ var pgp = require('pg-promise')(options);
 
 var app = express();
 app.use(bodyParser.json());
-const port = 3600;
+var port = process.env.PORT || 8080;
 
 var handleError = (err, req, res, next) => {
     res.status(500).json({
