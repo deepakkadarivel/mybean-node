@@ -4,9 +4,22 @@ var options = {
     promiseLib: promise
 };
 
+var constants = require('./appconstants/constants');
 var pgp = require('pg-promise')(options);
 var connectionString = process.env.DATABASE_URL ? process.env.DATABASE_URL : 'postgres://admin:C0mplexPwd!1234@localhost:5432/node_hero';
 var db = pgp(connectionString);
+
+
+function runSeedScripts() {
+    createUsersTable()
+}
+
+function createUsersTable() {
+    db.any(constants.CREATE_USER_TABLE).then()
+        .catch((err) => {
+            return console.log(err)
+        })
+};
 
 
 var getAllUsers = (req, res, next) => {
@@ -37,6 +50,7 @@ var createUser = (req, res, next) => {
 };
 
 module.exports = {
+    createUser: createUser,
     getAllUsers: getAllUsers,
-    createUser: createUser
+    runSeedScripts: runSeedScripts
 };
