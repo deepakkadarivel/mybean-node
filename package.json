@@ -21,9 +21,12 @@
   "author": "Deepak Kadarivel",
   "license": "MIT",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
+    "express-jwt": "^5.3.0",
+    "jsonwebtoken": "^7.4.2",
     "pg-promise": "^6.3.8"
   }
 }
