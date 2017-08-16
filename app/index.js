@@ -5,7 +5,7 @@ var app = express();
 app.use(bodyParser.json());
 var port = process.env.PORT || 8080;
 
-var router = require('./router');
+var {router, secureRouter} = require('./router');
 var db = require('./queries');
 
 db.runSeedScripts();
@@ -25,6 +25,7 @@ var handleError = (err, req, res, next) => {
 };
 
 app.use(router);
+app.use(secureRouter);
 app.use(handleNotFound);
 app.use(handleError);
 

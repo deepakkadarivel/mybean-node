@@ -33,7 +33,7 @@ function createUsersTable() {
 
 
 var getAllUsers = (req, res, next) => {
-    db.any('SELECT * FROM users').then((data) => {
+    db.any('SELECT * FROM account').then((data) => {
         res.status(200)
             .json({
                 status: 'success',
@@ -43,20 +43,6 @@ var getAllUsers = (req, res, next) => {
     }).catch((err) => {
         return next(err)
     })
-};
-
-var createUser = (req, res, next) => {
-    var user = req.body;
-
-    db.none('INSERT INTO users (name, age) VALUES ($1, $2);', [user.name, user.age]).then(() => {
-        res.status(200).json({
-            status: 'success',
-            message: 'User inserted'
-        })
-    }).catch((err) => {
-        return next(err);
-    })
-
 };
 
 var register = (req, res, next) => {
@@ -131,7 +117,6 @@ var validPassword = (password, password_hash) => {
 };
 
 module.exports = {
-    createUser: createUser,
     getAllUsers: getAllUsers,
     runSeedScripts: runSeedScripts,
     register: register,
