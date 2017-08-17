@@ -1,19 +1,19 @@
 var promise = require('bluebird');
-var bcrypt   = require('bcrypt-nodejs');
 var jwt = require('jsonwebtoken');
+
+var config = require('./config/env/development');
+var constants = require('./constants/constants');
+var crypt = require('./auth/crypt');
 
 var options = {
     promiseLib: promise
 };
 
-var constants = require('./appconstants/constants');
-var config = require('./appconstants/config');
 var pgp = require('pg-promise')(options);
 var QRE = pgp.errors.QueryResultError;
 var qrec = pgp.errors.queryResultErrorCode;
-var connectionString = process.env.DATABASE_URL ? process.env.DATABASE_URL : 'postgres://admin:C0mplexPwd!1234@localhost:5432/node_hero';
+var connectionString = process.env.DATABASE_URL ? process.env.DATABASE_URL : config.db;
 var db = pgp(connectionString);
-
 
 function runSeedScripts() {
     createUsersTable()
@@ -31,7 +31,6 @@ function createUsersTable() {
         });
 };
 
-
 var getAllUsers = (req, res, next) => {
     db.any('SELECT * FROM account').then((data) => {
         res.status(200)
@@ -47,7 +46,7 @@ var getAllUsers = (req, res, next) => {
 
 var register = (req, res, next) => {
     var account = req.body;
-    var password_hash = generateHash(account.password);
+    var password_hash = crypt.generateHash(account.password);
 
     db.none('INSERT INTO account (username, email, password_hash) VALUES ($1, $2, $3)', [account.username, account.email, password_hash]).then(() => {
         res.status(200).json({
@@ -72,7 +71,7 @@ var login = (req, res, next) => {
 
     db.one('SELECT * FROM account WHERE email=$1;', account.email).then((data) => {
 
-        if (!validPassword(account.password, data.password_hash)) {
+        if (!crypt.validPassword(account.password, data.password_hash)) {
             res.status(401).json({
                 status: 'Failed',
                 message: 'Authentication failed. Wrong password.',
@@ -106,14 +105,6 @@ var login = (req, res, next) => {
             return next(err);
         }
     })
-};
-
-var generateHash = (password) => {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
-
-var validPassword = (password, password_hash) => {
-    return bcrypt.compareSync(password, password_hash);
 };
 
 module.exports = {

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var secureRouter = express.Router();
-var config = require('./appconstants/config');
+var config = require('./config/env/development');
 var jwt = require('jsonwebtoken');
 
 var db = require('./queries');

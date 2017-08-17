@@ -1,9 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var config = require('./config/env/development');
 
 var app = express();
 app.use(bodyParser.json());
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || config.port;
 
 var {router, secureRouter} = require('./router');
 var db = require('./queries');
