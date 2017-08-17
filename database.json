@@ -1,0 +1,6 @@
+{
+  "defaultEnv": "development",
+
+  "development": "postgres://admin:C0mplexPwd!1234@localhost:5432/node_hero",
+  "production": {"ENV": "DATABASE_URL"}
+}

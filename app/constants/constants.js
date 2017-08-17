@@ -37,5 +37,11 @@ module.exports = {
     ' REFERENCES account (user_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION \n' +
     ');',
 
-    DROP_ACCOUNT_ROLE_TABLE : 'DROP TABLE IF EXISTS account_role;'
+    DROP_ACCOUNT_ROLE_TABLE : 'DROP TABLE IF EXISTS account_role;',
+
+    //payload constants
+    unauthorized: 'Unauthorized',
+    invalid_token: 'missing or invalid authentication token',
+    success: 'success',
+    account_created: 'account created',
 };

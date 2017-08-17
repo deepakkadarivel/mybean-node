@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var secureRouter = express.Router();
-var config = require('./config/env/development');
-var jwt = require('jsonwebtoken');
+var jwt = require('./auth/jwt');
 
-var db = require('./queries');
+var account = require('./auth/account/user');
 
 var getAppStatus = (req, res) => {
     res.status(200).json({
@@ -13,36 +12,13 @@ var getAppStatus = (req, res) => {
     })
 };
 
-var token = (req, res, next) => {
-    var token = req.body.token || req.headers['token'];
-
-    if (token) {
-        jwt.verify(token, config.jwtSecret, (err, decode) => {
-            if (err) {
-                res.status(401).json({
-                    status: 'Unauthorized',
-                    message: 'Unauthorized'
-                })
-            } else {
-                next()
-            }
-        })
-    } else {
-        res.status(401).json({
-            status: 'Unauthorized',
-            message: 'Unauthorized',
-            decode: decode
-        })
-    }
-};
-
 router.get('/', getAppStatus);
-router.post('/api/register', db.register);
-router.post('/api/login', db.login);
+router.post('/api/register', account.register);
+router.post('/api/login', account.login);
 
 // Validation Middleware
-secureRouter.use('', token);
-secureRouter.get('/api/users', db.getAllUsers);
+secureRouter.use('', jwt.token);
+secureRouter.get('/api/users', account.getAllUsers);
 
 module.exports = {
     router,

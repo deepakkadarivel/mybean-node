@@ -7,9 +7,6 @@ app.use(bodyParser.json());
 var port = process.env.PORT || config.port;
 
 var {router, secureRouter} = require('./router');
-var db = require('./queries');
-
-db.runSeedScripts();
 
 var handleNotFound = (req, res, next) => {
     var err = new Error('Not Found');

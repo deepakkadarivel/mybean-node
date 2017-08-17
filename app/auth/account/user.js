@@ -1,9 +1,10 @@
 var promise = require('bluebird');
-var jwt = require('jsonwebtoken');
+var jwt = require('../jwt');
 
-var config = require('./config/env/development');
-var constants = require('./constants/constants');
-var crypt = require('./auth/crypt');
+var config = require('../../config/env/development');
+var crypt = require('../../auth/crypt');
+var payload = require('../../response/payload');
+var constants = require('../../constants/constants');
 
 var options = {
     promiseLib: promise
@@ -14,22 +15,6 @@ var QRE = pgp.errors.QueryResultError;
 var qrec = pgp.errors.queryResultErrorCode;
 var connectionString = process.env.DATABASE_URL ? process.env.DATABASE_URL : config.db;
 var db = pgp(connectionString);
-
-function runSeedScripts() {
-    createUsersTable()
-}
-
-function createUsersTable() {
-    db.any(constants.DROP_USER_TABLE).then()
-        .catch((err) => {
-            return next(err)
-        });
-
-    db.any(constants.CREATE_ACCOUNT_TABLE).then()
-        .catch((err) => {
-            return next(err)
-        });
-};
 
 var getAllUsers = (req, res, next) => {
     db.any('SELECT * FROM account').then((data) => {
@@ -49,10 +34,11 @@ var register = (req, res, next) => {
     var password_hash = crypt.generateHash(account.password);
 
     db.none('INSERT INTO account (username, email, password_hash) VALUES ($1, $2, $3)', [account.username, account.email, password_hash]).then(() => {
-        res.status(200).json({
-            status: 'success',
-            message: 'account created'
-        })
+        // res.status(200).json({
+        //     status: 'success',
+        //     message: 'account created'
+        // })
+        payload.success(constants.success, constants.account_created, req, res)
     }).catch((err) => {
         if (err.code === '23505') {
             res.status(401).json({
@@ -77,21 +63,12 @@ var login = (req, res, next) => {
                 message: 'Authentication failed. Wrong password.',
             })
         } else {
-            const jwtPayload = {
-                id: data.id,
-                username: data.username,
-                email: data.email
-            };
-            const jwtData = {
-                expiresIn: config.jwtDuration,
-            };
-            const secret = config.jwtSecret;
-            var token = jwt.sign(jwtPayload, secret, jwtData);
+            var access_token = jwt.generateAccessTokenFrom(data.id, data.username, data.email);
 
             res.status(200).json({
                 status: 'success',
                 message: 'login successful',
-                access_token: token
+                access_token: access_token
             })
         }
 
@@ -109,7 +86,6 @@ var login = (req, res, next) => {
 
 module.exports = {
     getAllUsers: getAllUsers,
-    runSeedScripts: runSeedScripts,
     register: register,
     login: login
 };
