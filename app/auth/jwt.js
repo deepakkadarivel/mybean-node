@@ -1,11 +1,11 @@
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
-var constants = require('../constants/constants');
-var config = require('../config/env/development');
-var payload = require('../response/payload');
+const constants = require('../constants/constants');
+const config = require('../config/env/development');
+const payload = require('../response/payload');
 
-var token = (req, res, next) => {
-    var token = req.body.token || req.headers['access_token'];
+const token = (req, res, next) => {
+    const token = req.body.token || req.headers['access_token'];
 
     if (token) {
         jwt.verify(token, config.jwtSecret, (err, decode) => {
@@ -20,7 +20,7 @@ var token = (req, res, next) => {
     }
 };
 
-var generateAccessTokenFrom = (id, username, email) => {
+const generateAccessTokenFrom = (id, username, email) => {
     const jwtPayload = {
         id: id,
         username: username,
@@ -30,8 +30,8 @@ var generateAccessTokenFrom = (id, username, email) => {
         expiresIn: config.jwtDuration,
     };
     const secret = config.jwtSecret;
-    var access_token = jwt.sign(jwtPayload, secret, jwtData);
-    return access_token;
+    return jwt.sign(jwtPayload, secret, jwtData);
+
 };
 
 module.exports = {

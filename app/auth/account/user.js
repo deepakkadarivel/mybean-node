@@ -1,83 +1,58 @@
-var promise = require('bluebird');
-var jwt = require('../jwt');
+const promise = require('bluebird');
 
-var config = require('../../config/env/development');
-var crypt = require('../../auth/crypt');
-var payload = require('../../response/payload');
-var constants = require('../../constants/constants');
+const config = require('../../config/env/development');
+const constants = require('../../constants/constants');
+const crypt = require('../../auth/crypt');
+const jwt = require('../jwt');
+const payload = require('../../response/payload');
 
-var options = {
+const options = {
     promiseLib: promise
 };
 
-var pgp = require('pg-promise')(options);
-var QRE = pgp.errors.QueryResultError;
-var qrec = pgp.errors.queryResultErrorCode;
-var connectionString = process.env.DATABASE_URL ? process.env.DATABASE_URL : config.db;
-var db = pgp(connectionString);
+const pgp = require('pg-promise')(options);
+const QRE = pgp.errors.QueryResultError;
+const qrec = pgp.errors.queryResultErrorCode;
+const connectionString = process.env.DATABASE_URL ? process.env.DATABASE_URL : config.db;
+const db = pgp(connectionString);
 
-var getAllUsers = (req, res, next) => {
+const getAllUsers = (req, res, next) => {
     db.any('SELECT * FROM account').then((data) => {
-        res.status(200)
-            .json({
-                status: 'success',
-                data: data,
-                message: 'Retrieved ALL Users'
-            })
+        payload.successWithData(constants.success, null, constants.data, data, req, res);
     }).catch((err) => {
         return next(err)
     })
 };
 
-var register = (req, res, next) => {
-    var account = req.body;
-    var password_hash = crypt.generateHash(account.password);
+const login = (req, res, next) => {
+    const account = req.body;
 
-    db.none('INSERT INTO account (username, email, password_hash) VALUES ($1, $2, $3)', [account.username, account.email, password_hash]).then(() => {
-        // res.status(200).json({
-        //     status: 'success',
-        //     message: 'account created'
-        // })
-        payload.success(constants.success, constants.account_created, req, res)
+    db.one('SELECT * FROM account WHERE email=$1;', account.email).then((data) => {
+
+        if (!crypt.validPassword(account.password, data.password_hash)) {
+            payload.unauthorized(null, constants.unauthorized, constants.invalid_login, req, res);
+        } else {
+            const access_token = jwt.generateAccessTokenFrom(data.id, data.username, data.email);
+            payload.successWithData(constants.success, constants.login_successful, constants.access_token, access_token, req, res);
+        }
     }).catch((err) => {
-        if (err.code === '23505') {
-            res.status(401).json({
-                status: 'Failed',
-                message: 'User with email already exists.'
-            })
+        if (err instanceof QRE && err.code === qrec.noData) {
+            payload.unauthorized(err, constants.unauthorized, constants.invalid_login, req, res);
         } else {
             return next(err);
         }
     })
 };
 
-var login = (req, res, next) => {
-    var account = req.body;
+const register = (req, res, next) => {
+    const account = req.body;
+    const password_hash = crypt.generateHash(account.password);
 
-
-    db.one('SELECT * FROM account WHERE email=$1;', account.email).then((data) => {
-
-        if (!crypt.validPassword(account.password, data.password_hash)) {
-            res.status(401).json({
-                status: 'Failed',
-                message: 'Authentication failed. Wrong password.',
-            })
-        } else {
-            var access_token = jwt.generateAccessTokenFrom(data.id, data.username, data.email);
-
-            res.status(200).json({
-                status: 'success',
-                message: 'login successful',
-                access_token: access_token
-            })
-        }
-
+    db.none('INSERT INTO account (username, email, password_hash) VALUES ($1, $2, $3)', [account.username, account.email, password_hash]).then(() => {
+        payload.created(constants.created, constants.account_created, req, res)
     }).catch((err) => {
-        if (err instanceof QRE && err.code === qrec.noData) {
-            res.status(401).json({
-                status: 'Failed',
-                message: 'Authentication failed. User not found.'
-            })
+        if (err.code === constants.unique_violation) {
+            payload.unauthorized(err, constants.unauthorized, constants.duplicate_user, req, res);
         } else {
             return next(err);
         }
@@ -86,6 +61,6 @@ var login = (req, res, next) => {
 
 module.exports = {
     getAllUsers: getAllUsers,
-    register: register,
-    login: login
+    login: login,
+    register: register
 };

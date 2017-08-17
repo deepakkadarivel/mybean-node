@@ -1,32 +1,13 @@
 module.exports = {
     // query constants
-    CREATE_USER_TABLE : 'CREATE table IF NOT EXISTS users(  \n' +
-    '  id SERIAL NOT NULL,\n' +
-    '  name VARCHAR(20),\n' +
-    '  age SMALLINT\n' +
-    ');',
-
-    DROP_USER_TABLE : 'DROP TABLE IF EXISTS users CASCADE;',
-
-    CREATE_ACCOUNT_TABLE : 'CREATE TABLE IF NOT EXISTS account( \n' +
-    ' user_id SERIAL PRIMARY KEY, \n' +
-    ' username VARCHAR(255) UNIQUE NOT NULL, \n' +
-    ' email VARCHAR(255) UNIQUE NOT NULL, \n' +
-    ' password_hash VARCHAR(255) NOT NULL, \n' +
-    ' created_on TIMESTAMP WITHOUT TIME ZONE, \n' +
-    ' last_login TIMESTAMP WITHOUT TIME ZONE \n' +
-    ');',
-
-    DROP_ACCOUNT_TABLE : 'DROP TABLE IF EXISTS account CASCADE;',
-
-    CREATE_ROLE_TABLE : 'CREATE TABLE role( \n' +
+    CREATE_ROLE_TABLE: 'CREATE TABLE role( \n' +
     ' role_id SERIAL PRIMARY KEY, \n' +
     ' role_name VARCHAR(50) UNIQUE NOT NULL \n' +
     ');',
 
-    DROP_ROLE_TABLE : 'DROP TABLE IF EXISTS role CASCADE;',
+    DROP_ROLE_TABLE: 'DROP TABLE IF EXISTS role CASCADE;',
 
-    CREATE_ACCOUNT_ROLE_TABLE : 'CREATE TABLE account_role( \n' +
+    CREATE_ACCOUNT_ROLE_TABLE: 'CREATE TABLE account_role( \n' +
     ' user_id INTEGER NOT NULL, \n' +
     ' role_id INTEGER NOT NULL, \n' +
     ' grant_date TIMESTAMP WITHOUT TIME ZONE, \n' +
@@ -37,11 +18,29 @@ module.exports = {
     ' REFERENCES account (user_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION \n' +
     ');',
 
-    DROP_ACCOUNT_ROLE_TABLE : 'DROP TABLE IF EXISTS account_role;',
+    DROP_ACCOUNT_ROLE_TABLE: 'DROP TABLE IF EXISTS account_role;',
+
+    //pg-promise error codes
+    unique_violation: '23505',
 
     //payload constants
-    unauthorized: 'Unauthorized',
-    invalid_token: 'missing or invalid authentication token',
-    success: 'success',
+    access_token: 'access_token',
     account_created: 'account created',
+    app_initialized: 'App Initialized',
+
+    created: 'Created',
+
+    data: 'data',
+    duplicate_user: 'A user with that email already exists.',
+
+    failed: 'Failed',
+
+    invalid_login: 'There was an error with your E-Mail/Password combination. Please try again.',
+    invalid_token: 'missing or invalid authentication token',
+
+    login_successful: 'login successful',
+
+    success: 'Success',
+
+    unauthorized: 'Unauthorized',
 };

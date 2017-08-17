@@ -1,20 +1,20 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var config = require('./config/env/development');
+const express = require('express');
+const bodyParser = require('body-parser');
+const config = require('./config/env/development');
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
-var port = process.env.PORT || config.port;
+const port = process.env.PORT || config.port;
 
-var {router, secureRouter} = require('./router');
+const {router, secureRouter} = require('./router');
 
-var handleNotFound = (req, res, next) => {
-    var err = new Error('Not Found');
+const handleNotFound = (req, res, next) => {
+    const err = new Error('Not Found');
     err.status = 404;
     next(err)
 };
 
-var handleError = (err, req, res, next) => {
+const handleError = (err, req, res, next) => {
     res.status(err.status || 500)
         .json({
             status: 'error',

@@ -1,20 +1,20 @@
-var express = require('express');
-var router = express.Router();
-var secureRouter = express.Router();
-var jwt = require('./auth/jwt');
+const express = require('express');
 
-var account = require('./auth/account/user');
+const account = require('./auth/account/user');
+const constants = require('./constants/constants');
+const jwt = require('./auth/jwt');
+const payload = require('./response/payload');
 
-var getAppStatus = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'App Initialized'
-    })
+const router = express.Router();
+const secureRouter = express.Router();
+
+const getAppStatus = (req, res) => {
+    payload.success(constants.success, constants.app_initialized, req, res);
 };
 
 router.get('/', getAppStatus);
-router.post('/api/register', account.register);
 router.post('/api/login', account.login);
+router.post('/api/register', account.register);
 
 // Validation Middleware
 secureRouter.use('', jwt.token);
