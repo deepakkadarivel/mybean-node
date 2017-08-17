@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const constants = require('../constants/constants');
-const config = require('../config/env/development');
+const config = require('../../config/env/development');
 const payload = require('../response/payload');
 
 const token = (req, res, next) => {

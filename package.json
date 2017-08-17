@@ -4,9 +4,17 @@
   "description": "node-express",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "express_debug": "DEBUG=express* node index.js",
+    "db_up": "db-migrate up --config config/database.json -e prod",
+    "db_down": "db-migrate down --config config/database.json -e prod",
+    "prestart": "npm run db_up",
     "start": "node server.js",
-    "express_debug": "DEBUG=express* node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+
+    "db_up:dev": "db-migrate up --config config/database.json -e dev",
+    "db_down:dev": "db-migrate down --config config/database.json -e dev",
+    "prestart:dev": "npm run db_up:dev",
+    "start:dev": "node server.js"
   },
   "repository": {
     "type": "git",

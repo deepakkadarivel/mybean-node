@@ -1,6 +1,6 @@
 const promise = require('bluebird');
 
-const config = require('../../config/env/development');
+const config = require('../../../config/env/development');
 const constants = require('../../constants/constants');
 const crypt = require('../../auth/crypt');
 const jwt = require('../jwt');
