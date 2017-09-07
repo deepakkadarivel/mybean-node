@@ -1,6 +1,6 @@
 const express = require('express');
 
-const account = require('./auth/account/user');
+const neo = require('./neo/person');
 const constants = require('./constants/constants');
 const jwt = require('./auth/jwt');
 const payload = require('./response/payload');
@@ -13,12 +13,15 @@ const getAppStatus = (req, res) => {
 };
 
 router.get('/', getAppStatus);
-router.post('/api/login', account.login);
-router.post('/api/register', account.register);
+
+// neo4j access points
+router.post('/api/v1/login', neo.login);
+router.post('/api/v1/register', neo.register);
 
 // Validation Middleware
 secureRouter.use('', jwt.token);
-secureRouter.get('/api/users', account.getAllUsers);
+secureRouter.post('/api/v1/users', neo.allUsers);
+
 
 module.exports = {
     router,

@@ -20,11 +20,9 @@ const token = (req, res, next) => {
     }
 };
 
-const generateAccessTokenFrom = (id, username, email) => {
+const generateAccessTokenFrom = (email) => {
     const jwtPayload = {
-        id: id,
-        username: username,
-        email: email
+        email,
     };
     const jwtData = {
         expiresIn: config.jwtDuration,

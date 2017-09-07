@@ -10,7 +10,6 @@
     "prestart": "npm run db_down && npm run db_up",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-
     "db_up:dev": "db-migrate up --config config/database.json -e dev",
     "db_down:dev": "db-migrate down --config config/database.json -e dev",
     "prestart:dev": "npm run db_down:dev && npm run db_up:dev",
@@ -37,6 +36,7 @@
     "express": "^4.15.4",
     "express-jwt": "^5.3.0",
     "jsonwebtoken": "^7.4.2",
+    "neo4j-driver": "^1.4.0",
     "pg-promise": "^6.3.8"
   }
 }

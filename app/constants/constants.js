@@ -1,27 +1,6 @@
 module.exports = {
-    // query constants
-    CREATE_ROLE_TABLE: 'CREATE TABLE role( \n' +
-    ' role_id SERIAL PRIMARY KEY, \n' +
-    ' role_name VARCHAR(50) UNIQUE NOT NULL \n' +
-    ');',
-
-    DROP_ROLE_TABLE: 'DROP TABLE IF EXISTS role CASCADE;',
-
-    CREATE_ACCOUNT_ROLE_TABLE: 'CREATE TABLE account_role( \n' +
-    ' user_id INTEGER NOT NULL, \n' +
-    ' role_id INTEGER NOT NULL, \n' +
-    ' grant_date TIMESTAMP WITHOUT TIME ZONE, \n' +
-    ' PRIMARY KEY (user_id, role_id), \n' +
-    ' CONSTRAINT account_role_role_id_fkey FOREIGN KEY (role_id) \n' +
-    ' REFERENCES role (role_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, \n' +
-    ' CONSTRAINT account_role_user_id_fkey FOREIGN KEY (user_id) \n' +
-    ' REFERENCES account (user_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION \n' +
-    ');',
-
-    DROP_ACCOUNT_ROLE_TABLE: 'DROP TABLE IF EXISTS account_role;',
-
-    //pg-promise error codes
-    unique_violation: '23505',
+    //neo error codes
+    neo_unique_violation: 'Neo.ClientError.Schema.ConstraintValidationFailed',
 
     //payload constants
     access_token: 'access_token',
@@ -31,7 +10,7 @@ module.exports = {
     created: 'Created',
 
     data: 'data',
-    duplicate_user: 'A user with that email already exists.',
+    duplicate_user: 'A user has already taken this email or phone.',
 
     failed: 'Failed',
 
