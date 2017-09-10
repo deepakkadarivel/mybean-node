@@ -19,7 +19,7 @@ const allUsers = (req, res, next) => {
         limitParam: payloadParam.limit,
     };
 
-    session.run(query.ALL_USERS, params)
+    session.run(query.ALL_PERSONS, params)
         .then((result) => {
             let records = [];
             result.records.forEach((record) => {
@@ -46,7 +46,7 @@ const login = (req, res, next) => {
         emailParam: person.email
     };
 
-    session.run(query.LOGIN, params)
+    session.run(query.AUTHENTICATE_PERSON, params)
         .then((result) => {
             if (result.records.length) {
                 result.records.forEach((record) => {
@@ -79,7 +79,7 @@ const register = (req, res, next) => {
         passwordParam: password_hash
     };
 
-    session.run(query.REGISTER, params)
+    session.run(query.CREATE_PERSON, params)
         .then((result) => {
             result.records.forEach((record) => {
                 payload.created(constants.created, constants.account_created, req, res)

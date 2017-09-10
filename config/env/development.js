@@ -1,6 +1,10 @@
 module.exports = {
-    db: 'postgres://admin:C0mplexPwd!1234@localhost:5432/node_hero',
-    jwtDuration: '10m',
-    jwtSecret: 'my-api-secret',
+    jwtDuration: '',
+    jwtSecret: '',
+    neoUser: '',
+    neoUserPassword: '',
+    neoSandbox: '',
+    neoUserSandbox: '',
+    neoUserPasswordSandbox: '',
     port: 8080,
 };
