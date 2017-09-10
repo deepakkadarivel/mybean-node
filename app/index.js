@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const {graphqlExpress, graphiqlExpress} = require('apollo-server-express');
 const config = require('../config/env/development');
+const schema = require('./schema');
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,6 +23,9 @@ const handleError = (err, req, res, next) => {
             message: err.message
         })
 };
+
+app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
+app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}));
 
 app.use(router);
 app.use(secureRouter);

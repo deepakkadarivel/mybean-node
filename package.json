@@ -5,14 +5,8 @@
   "main": "server.js",
   "scripts": {
     "express_debug": "DEBUG=express* node index.js",
-    "db_up": "db-migrate up --config config/database.json -e prod",
-    "db_down": "db-migrate down --config config/database.json -e prod",
-    "prestart": "npm run db_down && npm run db_up",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db_up:dev": "db-migrate up --config config/database.json -e dev",
-    "db_down:dev": "db-migrate down --config config/database.json -e dev",
-    "prestart:dev": "npm run db_down:dev && npm run db_up:dev",
     "start:dev": "node server.js"
   },
   "repository": {
@@ -28,13 +22,16 @@
   "author": "Deepak Kadarivel",
   "license": "MIT",
   "dependencies": {
+    "apollo-server-express": "^1.1.2",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.0",
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.18.0",
     "db-migrate": "^0.10.0-beta.23",
     "db-migrate-pg": "^0.2.5",
     "express": "^4.15.4",
     "express-jwt": "^5.3.0",
+    "graphql": "^0.11.3",
+    "graphql-tools": "^1.2.2",
     "jsonwebtoken": "^7.4.2",
     "neo4j-driver": "^1.4.0",
     "pg-promise": "^6.3.8"
