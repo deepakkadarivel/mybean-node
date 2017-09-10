@@ -1,6 +1,7 @@
-const express = require('express');
 const bodyParser = require('body-parser');
+const express = require('express');
 const {graphqlExpress, graphiqlExpress} = require('apollo-server-express');
+const jwt = require('jsonwebtoken');
 const config = require('../config/env/development');
 const schema = require('./schema');
 
@@ -24,11 +25,34 @@ const handleError = (err, req, res, next) => {
         })
 };
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
-app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}));
+let access_token = {};
+const validateToken = (req, res, next) => {
+    const token = req.body.token || req.headers['access_token'];
+    if (token) {
+        jwt.verify(token, config.jwtSecret, (err, decode) => {
+            if (err) {
+                const newObj = {isTokenValid: false, value: null};
+                Object.assign(access_token, newObj);
+            } else {
+                const newObj = {isTokenValid: true, value: decode.email};
+                Object.assign(access_token, newObj);
+            }
+        })
+    } else {
+        const newObj = {isTokenValid: false, value: null};
+        Object.assign(access_token, newObj);
+    }
+    next();
+};
+
+app.use(validateToken);
+app.use('/graphql', bodyParser.json(), graphqlExpress({schema, context: {access_token}}));
+app.use('/graphiql', graphiqlExpress({
+    endpointURL: '/graphql',
+}));
 
 app.use(router);
-app.use(secureRouter);
+// app.use(secureRouter);
 app.use(handleNotFound);
 app.use(handleError);
 

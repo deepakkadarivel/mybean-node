@@ -4,21 +4,26 @@ const config = require('../../config/env/development');
 const constants = require('../constants/constants');
 const crypt = require('../auth/crypt');
 const jwt = require('../auth/jwt');
+const payload = require('../constants/constants');
 const query = require('../../app/neo/nodes/person');
 
-const driver = neo4j.driver(config.neoSandbox, neo4j.auth.basic(config.neoUserSandbox, config.neoUserPasswordSandbox));
+const driver = neo4j.driver(config.neoLocal, neo4j.auth.basic(config.neoUser, config.neoUserPassword));
 
 module.exports = {
     Query: {
-        allPersons(_, params) {
-            let session = driver.session();
-            return session.run(query.ALL_PERSONS, params)
-                .then(result => {
-                    return result.records.map(record => {
-                        return record.get("person").properties
-                    })
-                });
-            session.close();
+        allPersons(_, params, access_token) {
+            if (access_token.access_token.isTokenValid) {
+                let session = driver.session();
+                return session.run(query.ALL_PERSONS, params)
+                    .then(result => {
+                        return result.records.map(record => {
+                            return record.get("person").properties
+                        })
+                    });
+                session.close();
+            } else {
+                return [];
+            }
         },
         authenticatePerson(_, params) {
             let session = driver.session();
