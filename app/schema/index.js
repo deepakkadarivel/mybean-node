@@ -2,6 +2,11 @@ const {makeExecutableSchema} = require('graphql-tools');
 const resolvers = require('./resolvers');
 
 const typeDefs = `
+  interface Payload {
+    status: String!
+    message: String!
+  }
+  
   type Person {
     id: ID!
     name: String!
@@ -21,9 +26,15 @@ const typeDefs = `
     message: String!
     access_token: String
   }
+  
+  type Persons implements Payload {
+    status: String!
+    message: String!
+    persons: [Person]
+  }
 
   type Query {
-    allPersons(skip: Int!, limit: Int!): [Person!]!
+    allPersons(skip: Int!, limit: Int!): Persons!
     allRecords(skip: Int!, limit: Int!): [Record!]!
     authenticatePerson(email: String!, password: String!): Authentication!
   }
