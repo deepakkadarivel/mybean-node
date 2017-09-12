@@ -1,6 +1,7 @@
 module.exports = {
     jwtDuration: '',
     jwtSecret: '',
+    neoLocal: '',
     neoUser: '',
     neoUserPassword: '',
     neoSandbox: '',
