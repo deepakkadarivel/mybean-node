@@ -32,10 +32,16 @@ const typeDefs = `
     message: String!
     persons: [Person]
   }
+  
+  type Records implements Payload {
+    status: String!
+    message: String!
+    records: [Record]
+  }
 
   type Query {
     allPersons(skip: Int!, limit: Int!): Persons!
-    allRecords(skip: Int!, limit: Int!): [Record!]!
+    allRecords(skip: Int!, limit: Int!): Records!
     authenticatePerson(email: String!, password: String!): Authentication!
   }
   

@@ -45,15 +45,20 @@ module.exports = {
                 });
             session.close();
         },
-        allRecords(_, params) {
-            let session = driver.session();
-            return session.run(query.ALL_RECORDS, params)
-                .then(result => {
-                    return result.records.map(record => {
-                        return record.get("record").properties
-                    })
-                });
-            session.close();
+        allRecords(_, params, access_token) {
+            if (access_token.access_token.isTokenValid) {
+                let session = driver.session();
+                let records = session.run(query.ALL_RECORDS, params)
+                    .then(result => {
+                        return result.records.map(record => {
+                            return record.get("record").properties
+                        })
+                    });
+                session.close();
+                return {status: constants.success, message: constants.success, records};
+            } else {
+                return {status: constants.unauthorized, message: constants.invalid_token};
+            }
         },
     },
 
