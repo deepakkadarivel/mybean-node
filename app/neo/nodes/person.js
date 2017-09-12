@@ -16,10 +16,12 @@ module.exports = {
 
     //Person
     ALL_PERSONS: 'MATCH (person:Person) RETURN person SKIP {skip} LIMIT {limit}',
-    AUTHENTICATE_PERSON: 'MATCH (person:Person {email: {email}}) RETURN person LIMIT 1',
     CREATE_PERSON: 'MERGE (person:Person {id: {id}, name: {name}, email: {email}, phone: {phone}, password: {password}}) RETURN person',
+    PERSON_BY_EMAIL: 'MATCH (person:Person {email: {email}}) RETURN person LIMIT 1',
+    PERSON_BY_ID: 'MATCH (person:Person {id: {id}}) RETURN person LIMIT 1',
 
     //Record
     ALL_RECORDS: 'MATCH (record:Record) RETURN record SKIP {skip} LIMIT {limit}',
-    CREATE_RECORD: 'MERGE (record:Record {id: {id}, url: {url}, description: {description}}) RETURN record',
+    CREATE_RECORD: 'MERGE (record:Record {id: {id}, url: {url}, description: {description}, uploadedBy: {uploadedBy}}) RETURN record',
+    RELATE_RECORD: 'MATCH (person:Person {id: {id}}),(record:Record {id: {recordId}}) CREATE (person)-[r:UPLOADED]->(record)',
 };

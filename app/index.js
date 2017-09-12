@@ -34,7 +34,7 @@ const validateToken = (req, res, next) => {
                 const newObj = {isTokenValid: false, value: null};
                 Object.assign(access_token, newObj);
             } else {
-                const newObj = {isTokenValid: true, value: decode.email};
+                const newObj = {isTokenValid: true, value: decode.id};
                 Object.assign(access_token, newObj);
             }
         })
@@ -49,6 +49,7 @@ app.use(validateToken);
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema, context: {access_token}}));
 app.use('/graphiql', graphiqlExpress({
     endpointURL: '/graphql',
+    passHeader: `'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmMmE5MGEwLTk3ZDQtMTFlNy04MGJjLTFkOWYxYjRhMjk1MCIsImlhdCI6MTUwNTI0MzQ4MiwiZXhwIjoxNTA1MjQ1MjgyfQ.u45BaVqWuCWDD7Kd4yGKFpuML8SUHqQ2CKg0h8xRoHQ'`,
 }));
 
 app.use(router);
