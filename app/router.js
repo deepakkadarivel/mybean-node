@@ -22,7 +22,7 @@ router.get('/', getAppStatus);
 router.post('/api/v1/login', neo.login);
 router.post('/api/v1/register', neo.register);
 router.get('/uploadform', Upload.displayForm);
-router.post('/upload', multipartMiddleware, Upload.upload);
+router.put('/upload', multipartMiddleware, Upload.upload);
 
 // Validation Middleware
 secureRouter.use('', jwt.token);
