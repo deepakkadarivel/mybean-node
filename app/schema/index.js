@@ -19,6 +19,7 @@ const typeDefs = `
     id: ID!
     url: String!
     description: String!
+    uploadedBy: ID!
   }
   
   type Authentication {
@@ -43,6 +44,7 @@ const typeDefs = `
     allPersons(skip: Int!, limit: Int!): Persons!
     allRecords(skip: Int!, limit: Int!): Records!
     authenticatePerson(email: String!, password: String!): Authentication!
+    personById(id: String!): Persons!
   }
   
   type Mutation {

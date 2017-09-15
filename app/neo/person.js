@@ -46,7 +46,7 @@ const login = (req, res, next) => {
         emailParam: person.email
     };
 
-    session.run(query.AUTHENTICATE_PERSON, params)
+    session.run(query.PERSON_BY_EMAIL, params)
         .then((result) => {
             if (result.records.length) {
                 result.records.forEach((record) => {
