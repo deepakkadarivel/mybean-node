@@ -4,6 +4,7 @@ const {graphqlExpress, graphiqlExpress} = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
 const config = require('../config/env/development');
 const schema = require('./schema');
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
@@ -46,10 +47,10 @@ const validateToken = (req, res, next) => {
 };
 
 app.use(validateToken);
-app.use('/graphql', bodyParser.json(), graphqlExpress({schema, context: {access_token}}));
+app.use('/graphql', cors(), bodyParser.json(), graphqlExpress({schema, context: {access_token}}));
 app.use('/graphiql', graphiqlExpress({
     endpointURL: '/graphql',
-    passHeader: `'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmMmE5MGEwLTk3ZDQtMTFlNy04MGJjLTFkOWYxYjRhMjk1MCIsImlhdCI6MTUwNTI0MzQ4MiwiZXhwIjoxNTA1MjQ1MjgyfQ.u45BaVqWuCWDD7Kd4yGKFpuML8SUHqQ2CKg0h8xRoHQ'`,
+    passHeader: `'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIyMTc2YTUwLTlhMTEtMTFlNy1hNGFlLWVkNDc2ZTQzYWY2YiIsImlhdCI6MTUwNTQ4MDU1MSwiZXhwIjoxNTA1NDgyMzUxfQ.WsqkJI1QItdlHll1z9O6oVJCQjFJZKTfMawxpRSH6Lk'`,
 }));
 
 app.use(router);

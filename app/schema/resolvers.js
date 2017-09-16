@@ -86,6 +86,19 @@ module.exports = {
             params.password = password_hash;
             return await putData(query.CREATE_PERSON, params);
         },
+        authenticatePerson: async (_, params) => {
+            let persons = await getData(query.PERSON_BY_EMAIL, params, "person");
+            if (persons.length) {
+                if (!crypt.validPassword(params.password, persons[0].password)) {
+                    return {authenticated: false, message: constants.invalid_login};
+                } else {
+                    const access_token = jwt.generateAccessTokenFrom(persons[0].id);
+                    return {authenticated: true, message: constants.login_successful, person: persons[0], access_token};
+                }
+            } else {
+                return {authenticated: false, message: constants.invalid_login};
+            }
+        },
         createRecord: async (_, params, access_token) => {
             let id = access_token.access_token.value;
             params.uploadedBy = id;
