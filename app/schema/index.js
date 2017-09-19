@@ -49,7 +49,7 @@ const typeDefs = `
   }
   
   type Mutation {
-    createPerson(name: String!, email: String!, phone: String!, password: String!): [Person!]!
+    createPerson(name: String!, email: String!, phone: String!, password: String!): Authentication!
     authenticatePerson(email: String!, password: String!): Authentication!
     createRecord(url: String!, description: String!): [Record!]!
   }

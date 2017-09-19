@@ -6,7 +6,7 @@ const crypt = require('../auth/crypt');
 const jwt = require('../auth/jwt');
 const query = require('../../app/neo/nodes/person');
 
-const driver = neo4j.driver(config.neoSandbox, neo4j.auth.basic(config.neoUserSandbox, config.neoUserPasswordSandbox));
+const driver = neo4j.driver(config.neoLocal, neo4j.auth.basic(config.neoUser, config.neoUserPassword));
 
 const getData = (fetchQuery, params, property) => {
     let session = driver.session();
@@ -82,9 +82,16 @@ module.exports = {
 
     Mutation: {
         createPerson: async (_, params) => {
-            const password_hash = crypt.generateHash(params.password);
-            params.password = password_hash;
-            return await putData(query.CREATE_PERSON, params);
+            let persons = await getData(query.PERSON_BY_EMAIL, params, "person");
+            if (persons.length) {
+                return {authenticated: false, message: constants.duplicate_user}
+            } else {
+                const password_hash = crypt.generateHash(params.password);
+                params.password = password_hash;
+                let person = await putData(query.CREATE_PERSON, params);
+                const access_token = jwt.generateAccessTokenFrom(person.id);
+                return {authenticated: true, message: constants.created_user, person: person[0], access_token};
+            }
         },
         authenticatePerson: async (_, params) => {
             let persons = await getData(query.PERSON_BY_EMAIL, params, "person");
