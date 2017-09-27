@@ -50,7 +50,7 @@ app.use(validateToken);
 app.use('/graphql', cors(), bodyParser.json(), graphqlExpress({schema, context: {access_token}}));
 app.use('/graphiql', graphiqlExpress({
     endpointURL: '/graphql',
-    passHeader: `'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIyMTc2YTUwLTlhMTEtMTFlNy1hNGFlLWVkNDc2ZTQzYWY2YiIsImlhdCI6MTUwNTQ4MDU1MSwiZXhwIjoxNTA1NDgyMzUxfQ.WsqkJI1QItdlHll1z9O6oVJCQjFJZKTfMawxpRSH6Lk'`,
+    passHeader: `'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNTA5NDYwLTlkMTQtMTFlNy1iNWNlLTA1NTg1MGEwOWMxNSIsImlhdCI6MTUwNjUxMDI4NCwiZXhwIjoxNTA2NTEzODg0fQ.E7DMJ-E1zNhxnVZSiuAGW74-5nP6wS2fcNfBqA_ieBY'`,
 }));
 
 app.use(router);

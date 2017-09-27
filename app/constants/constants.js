@@ -19,6 +19,7 @@ module.exports = {
     created_user: 'Created User',
     login_successful: 'login successful',
 
+    pending: 'Pending',
     success: 'Success',
 
     unauthorized: 'Unauthorized',

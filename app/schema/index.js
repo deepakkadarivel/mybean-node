@@ -20,6 +20,13 @@ const typeDefs = `
     url: String!
     description: String!
     uploadedBy: ID!
+    fileName: String!
+    fileType: String!
+    fileSize: Int!
+    status: String!
+    case: String!
+    Amount: Float!
+    Date: String!
   }
   
   type Authentication {

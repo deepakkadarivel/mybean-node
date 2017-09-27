@@ -22,6 +22,6 @@ module.exports = {
 
     //Record
     ALL_RECORDS: 'MATCH (record:Record) RETURN record SKIP {skip} LIMIT {limit}',
-    CREATE_RECORD: 'MERGE (record:Record {id: {id}, url: {url}, description: {description}, uploadedBy: {uploadedBy}}) RETURN record',
+    CREATE_RECORD: 'MERGE (record:Record {id: {id}, url: {url}, description: {description}, uploadedBy: {uploadedBy}, fileName: {fileName}, fileType: {fileType}, fileSize: {fileSize}, status: {status}, case: {case}, amount: {amount}, date: {date}}) RETURN record',
     RELATE_RECORD: 'MATCH (person:Person {id: {id}}),(record:Record {id: {recordId}}) CREATE (person)-[r:UPLOADED]->(record)',
 };

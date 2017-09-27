@@ -39,6 +39,16 @@ const createRelation = (relateQuery, params) => {
     session.close();
 };
 
+const createNewRecord = async(params, id) => {
+    params.uploadedBy = id;
+    let records = await putData(query.CREATE_RECORD, params);
+    await createRelation(query.RELATE_RECORD, {id, recordId: records[0].id});
+};
+
+module.exports = {
+    createNewRecord,
+};
+
 module.exports = {
     Query: {
         async allPersons(_, params, access_token) {
@@ -113,5 +123,5 @@ module.exports = {
             await createRelation(query.RELATE_RECORD, {id, recordId: records[0].id});
             return records;
         },
-    }
+    },
 };

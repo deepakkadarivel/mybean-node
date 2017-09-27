@@ -20,6 +20,18 @@ const token = (req, res, next) => {
     }
 };
 
+const verifyToken = (token) => {
+    jwt.verify(token, config.jwtSecret, (err, decode) => {
+        if (err) {
+            const newObj = {isTokenValid: false, value: null};
+            return Object.assign(access_token, newObj);
+        } else {
+            const newObj = {isTokenValid: true, value: decode.id};
+            return Object.assign(access_token, newObj);
+        }
+    });
+};
+
 const generateAccessTokenFrom = (id) => {
     const jwtPayload = {
         id,
@@ -34,5 +46,6 @@ const generateAccessTokenFrom = (id) => {
 
 module.exports = {
     token: token,
-    generateAccessTokenFrom: generateAccessTokenFrom
+    generateAccessTokenFrom: generateAccessTokenFrom,
+    verifyToken,
 };
